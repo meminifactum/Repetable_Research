@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <ResearchProjectDef>
+    <defName>EndlessProgress</defName>
+    <label>endless progress</label>
+    <description>Through hunger, raids, and the cold of endless nights, your colony has endured. Every step forward is proof of resilience, a testament to survival carved from hardship. This research can be repeated infinitely, each completion giving a small and random colony-wide bonus.</description>
+    <requiredResearchFacilities>
+      <li>MultiAnalyzer</li>
+    </requiredResearchFacilities>
+    <tab>Repeatables</tab>
+    <baseCost>8000</baseCost>
+    <techLevel>Ultra</techLevel>
+    <prerequisites>
+      <li>ShipSensorCluster</li>
+      <li>ShipEngine</li>
+      <li>ShipReactor</li>
+      <li>ShipCryptosleep</li>
+      <li>ShipComputerCore</li>
+    </prerequisites>
+    <researchViewX>1.00</researchViewX>
+    <researchViewY>1.00</researchViewY>
+  </ResearchProjectDef>
+</Defs>

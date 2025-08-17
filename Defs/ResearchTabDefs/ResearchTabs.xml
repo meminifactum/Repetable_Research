@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ResearchTabDef>
+    <defName>Repeatables</defName>
+    <label>repeatables</label>
+    <generalTitle>Repeatable research projects</generalTitle>
+    <generalDescription>Projects that can be researched endlessly, offering minor, incremental improvements to the colony.</generalDescription>
+  </ResearchTabDef>
+
+</Defs>
