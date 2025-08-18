@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <ResearchProjectDef>
+    <defName>EndlessProgress_Temp</defName>
+    <label>endless cycle</label>
+    <description>Sparks of brilliance rise from struggle, brief yet radiant against the dark. Each discovery quickens the heart of the colony, a reminder that progress is never still. This research can be repeated infinitely, each completion granting a small and random colony-wide bonus that fades with time.</description>
+    <requiredResearchFacilities>
+      <li>MultiAnalyzer</li>
+    </requiredResearchFacilities>
+    <tab>Repeatables</tab>
+    <baseCost>8000</baseCost>
+    <techLevel>Ultra</techLevel>
+    <prerequisites>
+      <li>ShipSensorCluster</li>
+      <li>ShipEngine</li>
+      <li>ShipReactor</li>
+      <li>ShipCryptosleep</li>
+      <li>ShipComputerCore</li>
+    </prerequisites>
+    <researchViewX>2.00</researchViewX>
+    <researchViewY>1.00</researchViewY>
+  </ResearchProjectDef>
+</Defs>
+
+
+<!--
+<Defs>
+  <ResearchProjectDef>
+
+    <label>Endless Progress (Temporary)</label>
+    <description>Repeatable research that grants a temporary small stat bonus to a random stat.</description>
+    <baseCost>8000</baseCost>
+    <tab>Repeatables</tab>
+    <techLevel>Industrial</techLevel>
+    <prerequisites/>
+    <researchViewX>4</researchViewX>
+    <researchViewY>0</researchViewY>
+    <researchViewDrawAsPrerequisite>false</researchViewDrawAsPrerequisite>
+  </ResearchProjectDef>
+</Defs>
+-->

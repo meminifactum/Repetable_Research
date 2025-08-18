@@ -5,7 +5,7 @@
   <packageId>memini.repeatableresearch</packageId>
 
   <description>
-	<![CDATA[This mod adds repeatable research for players who dislike seeing their research pawns idle in the late game.]]>
+	<![CDATA[This mod introduces two repeatable research projects designed for players who dislike seeing their researchers idle in the late game. One grants lasting effects, the other provides temporary boosts. All options are fully configurable in the mod settings menu.]]>
 
   </description>
 
@@ -15,7 +15,7 @@
 
   <modClass IgnoreIfNoMatchingField="True">RepeatableResearch.RRMod</modClass>
 
-  <modVersion>1.0.2</modVersion>
+  <modVersion>1.0.5</modVersion>
 
   <url>https://github.com/meminifactum/Repetable_Research</url>
 

@@ -5,7 +5,7 @@
     <defName>Repeatables</defName>
     <label>repeatables</label>
     <generalTitle>Repeatable research projects</generalTitle>
-    <generalDescription>Projects that can be researched endlessly, offering minor, incremental improvements to the colony.</generalDescription>
+    <generalDescription>Projects that can be researched endlessly, offering minor improvements to the colony.</generalDescription>
   </ResearchTabDef>
 
 </Defs>
