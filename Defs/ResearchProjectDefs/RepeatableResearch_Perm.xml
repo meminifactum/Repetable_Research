@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
   <ResearchProjectDef>
-    <defName>EndlessProgress</defName>
+    <defName>EndlessProgress_Perm</defName>
     <label>endless progress</label>
-    <description>Through hunger, raids, and the cold of endless nights, your colony has endured. Every step forward is proof of resilience, a testament to survival carved from hardship. This research can be repeated infinitely, each completion giving a small and random colony-wide bonus.</description>
+    <description>Through hunger, raids, and the cold of endless nights, your colony has endured. Every step forward is proof of resilience, a testament to survival carved from hardship. This research can be repeated infinitely, each completion granting a small and random colony-wide bonus that lasts forever.</description>
     <requiredResearchFacilities>
       <li>MultiAnalyzer</li>
     </requiredResearchFacilities>
@@ -21,3 +21,22 @@
     <researchViewY>1.00</researchViewY>
   </ResearchProjectDef>
 </Defs>
+
+
+<!-- 
+<Defs>
+  <ResearchProjectDef>
+    <defName>EndlessProgress_Perm</defName>
+    <label>Endless Progress (Permanent)</label>
+    <description>Repeatable research that grants a permanent small stat bonus to a random stat.</description>
+    <baseCost>8000</baseCost>
+    <tab>Repeatables</tab>
+    <techLevel>Industrial</techLevel>
+    <prerequisites/>
+    <researchViewX>0</researchViewX>
+    <researchViewY>0</researchViewY>
+    <researchViewDrawAsPrerequisite>false</researchViewDrawAsPrerequisite>
+  </ResearchProjectDef>
+</Defs>
+
+-->
