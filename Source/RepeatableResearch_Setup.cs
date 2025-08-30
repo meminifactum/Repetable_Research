@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using HarmonyLib;
 using Verse;
 
-namespace RepeatableResearch
-{
+namespace RepeatableResearch {
     [StaticConstructorOnStartup]
-    public static class Main
-    {
-        static Main()
-        {
-            var harmony = new Harmony("com.memini.repeatableresearch");
-            harmony.PatchAll();
+    public static class RR_Bootstrap {
+        static RR_Bootstrap() {
+            try {
+                var h = new Harmony("com.memini.repeatableresearch");
+                h.PatchAll();
+                Log.Message("[RR] bootstrap ok: PatchAll() ran");
+            } catch (System.Exception e) {
+                Log.Error("[RR] bootstrap failed: " + e);
+            }
         }
     }
 }
-

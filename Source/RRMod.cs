@@ -1,26 +1,37 @@
-﻿using System.Linq;
+using System.Linq;
+using System.Reflection;                    // ? added
 using RimWorld;
 using UnityEngine;
 using Verse;
 using System.Collections.Generic;
 
-namespace RepeatableResearch
-{
-    public class RRMod : Mod
-    {
+namespace RepeatableResearch {
+    public class RRMod : Mod {
         public static RRSettings Settings;
         private string _search = "";
         private Vector2 _leftScroll, _rightScroll;
 
-        public RRMod(ModContentPack pack) : base(pack)
-        {
+        public RRMod(ModContentPack pack) : base(pack) {
             Settings = GetSettings<RRSettings>();
         }
 
+        // ---- helper: rebuild affected set without hard reference to RepeatableResearchComp
+        private static void RebuildAffectedSafe() {
+            try {
+                var game = Current.Game;
+                if (game == null) return;
+                var comp = game.components?
+                    .FirstOrDefault(c => c != null && c.GetType().FullName == "RepeatableResearch.RepeatableResearchComp");
+                comp?.GetType()
+                    .GetMethod("RebuildAffected", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    ?.Invoke(comp, null);
+            } catch { /* no-op */ }
+        }
+        // ---------------------------------------------------------
+
         public override string SettingsCategory() => "Repeatable Research";
 
-        public override void DoSettingsWindowContents(Rect inRect)
-        {
+        public override void DoSettingsWindowContents(Rect inRect) {
             var lsTop = new Listing_Standard();
 
             var top = new Rect(inRect.x, inRect.y, inRect.width, 250f);
@@ -30,44 +41,56 @@ namespace RepeatableResearch
             lsTop.GapLine();
 
             // Permanent rate
-            lsTop.Label($"Permanent gain per completion: {Settings.incrementPercentPerm:0.0}%");
-            Settings.incrementPercentPerm = Widgets.HorizontalSlider(
-                lsTop.GetRect(24f), Settings.incrementPercentPerm, 0.5f, 3.0f, false, "", "0.5%", "3.0%", 0.5f);
+            {
+                lsTop.Label($"Permanent gain per completion: {Settings.incrementPercentPerm:0.0}%");
+                var r = lsTop.GetRect(24f);
+                float v = Settings.incrementPercentPerm;
+                v = Widgets.HorizontalSlider(r, v, 0.5f, 3.0f);                  // ? ?? ????
+                v = Mathf.Round(v * 10f) / 10f;                                  // 0.1 ?? ???
+                Settings.incrementPercentPerm = v;
+            }
 
             // Temporary rate
-            lsTop.Label($"Temporary gain per completion: {Settings.incrementPercentTemp:0.0}%");
-            Settings.incrementPercentTemp = Widgets.HorizontalSlider(
-                lsTop.GetRect(24f), Settings.incrementPercentTemp, 0.5f, 3.0f, false, "", "0.5%", "3.0%", 0.5f);
+            {
+                lsTop.Label($"Temporary gain per completion: {Settings.incrementPercentTemp:0.0}%");
+                var r = lsTop.GetRect(24f);
+                float v = Settings.incrementPercentTemp;
+                v = Widgets.HorizontalSlider(r, v, 0.5f, 3.0f);                  // ? ?? ????
+                v = Mathf.Round(v * 10f) / 10f;
+                Settings.incrementPercentTemp = v;
+            }
 
             // Temporary duration
-            lsTop.Label($"Temporary buff duration: {Settings.tempDurationDays:0.0} days");
-            Settings.tempDurationDays = Widgets.HorizontalSlider(
-                lsTop.GetRect(24f), Mathf.Clamp(Settings.tempDurationDays, 0.5f, 60f), 0.5f, 60f, false, "", "0.5d", "60d", 0.5f);
+            {
+                lsTop.Label($"Temporary buff duration: {Settings.tempDurationDays:0.0} days");
+                var r = lsTop.GetRect(24f);
+                float v = Settings.tempDurationDays;
+                v = Mathf.Clamp(Widgets.HorizontalSlider(r, v, 0.5f, 60f), 0.5f, 60f); // ? ?? ????
+                v = Mathf.Round(v * 10f) / 10f;
+                Settings.tempDurationDays = v;
+            }
+
 
             // Reset candidate list
             var r1 = lsTop.GetRect(28f);
-            if (Widgets.ButtonText(new Rect(r1.x, r1.y, 180f, 28f), "Reset to defaults"))
-            {
+            if (Widgets.ButtonText(new Rect(r1.x, r1.y, 180f, 28f), "Reset to defaults")) {
                 Settings.userStatNames.Clear();
                 WriteSettings();
+                RebuildAffectedSafe();                 // ? added
             }
 
             // Remove all stat buffs
             var r2 = lsTop.GetRect(28f);
-            if (Widgets.ButtonText(new Rect(r2.x, r2.y, 220f, 28f), "Remove all stat buffs"))
-            {
+            if (Widgets.ButtonText(new Rect(r2.x, r2.y, 220f, 28f), "Remove all stat buffs")) {
                 Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
                     "Remove all permanent and temporary buffs? This cannot be undone.",
                     delegate {
                         var comp = Current.Game?.GetComponent<RepeatableResearchComp>();
-                        if (comp != null)
-                        {
+                        if (comp != null) {
                             comp.ClearAllBuffs();
                             ResearchDescPatcher.UpdateDescription();
                             Messages.Message("All Repeatable Research buffs removed.", MessageTypeDefOf.NeutralEvent);
-                        }
-                        else
-                        {
+                        } else {
                             Messages.Message("Game not loaded. Open a save to clear buffs.", MessageTypeDefOf.RejectInput);
                         }
                     }, destructive: true));
@@ -89,8 +112,7 @@ namespace RepeatableResearch
                 .Where(sd => sd != null)
                 .OrderBy(sd => sd.label ?? sd.defName);
 
-        private static float CalcRowHeight(string text, float labelWidth)
-        {
+        private static float CalcRowHeight(string text, float labelWidth) {
             var oldAnchor = Text.Anchor; var oldWrap = Text.WordWrap;
             Text.Anchor = TextAnchor.UpperLeft; Text.WordWrap = true;
             float h = Mathf.Ceil(Text.CalcHeight(text, labelWidth));
@@ -98,8 +120,7 @@ namespace RepeatableResearch
             return Mathf.Max(24f, h);
         }
 
-        private void DrawLeft(Rect rect)
-        {
+        private void DrawLeft(Rect rect) {
             var ls = new Listing_Standard();
             ls.Begin(rect);
 
@@ -118,8 +139,7 @@ namespace RepeatableResearch
             float labelW = listRect.width - 16f - btnW - 4f;
 
             float total = 0f;
-            foreach (var sd in items)
-            {
+            foreach (var sd in items) {
                 string text = $"{sd.label.CapitalizeFirst()} ({sd.defName})";
                 total += CalcRowHeight(text, labelW) + 2f;
             }
@@ -129,8 +149,7 @@ namespace RepeatableResearch
 
             Widgets.BeginScrollView(listRect, ref _leftScroll, view);
             float y = 0f;
-            foreach (var sd in items)
-            {
+            foreach (var sd in items) {
                 string text = $"{sd.label.CapitalizeFirst()} ({sd.defName})";
                 float rowH = CalcRowHeight(text, labelW);
                 var labelRect = new Rect(0, y, labelW, rowH);
@@ -141,10 +160,10 @@ namespace RepeatableResearch
                 Widgets.Label(labelRect, text);
                 Text.Anchor = oldAnchor; Text.WordWrap = oldWrap;
 
-                if (Widgets.ButtonText(btnRect, "Add"))
-                {
+                if (Widgets.ButtonText(btnRect, "Add")) {
                     Settings.userStatNames.Add(sd.defName);
                     WriteSettings();
+                    RebuildAffectedSafe();             // ? added
                 }
                 TooltipHandler.TipRegion(labelRect, text);
 
@@ -155,8 +174,7 @@ namespace RepeatableResearch
             ls.End();
         }
 
-        private void DrawRight(Rect rect)
-        {
+        private void DrawRight(Rect rect) {
             var ls = new Listing_Standard();
             ls.Begin(rect);
             ls.Label("Active candidates (rolled randomly):");
@@ -168,8 +186,7 @@ namespace RepeatableResearch
                 .Where(sd => sd != null)
                 .OrderBy(sd => sd.label ?? sd.defName)
                 .ToList();
-            if (chosen.Count == 0)
-            {
+            if (chosen.Count == 0) {
                 chosen = RRPool.DefaultActive
                     .Select(n => DefDatabase<StatDef>.GetNamedSilentFail(n))
                     .Where(sd => sd != null)
@@ -181,8 +198,7 @@ namespace RepeatableResearch
             float labelW = listRect.width - 16f - btnW - 4f;
 
             float total = 0f;
-            foreach (var sd in chosen)
-            {
+            foreach (var sd in chosen) {
                 string text = $"{sd.label.CapitalizeFirst()} ({sd.defName})";
                 total += CalcRowHeight(text, labelW) + 2f;
             }
@@ -192,8 +208,7 @@ namespace RepeatableResearch
 
             Widgets.BeginScrollView(listRect, ref _rightScroll, view);
             float y = 0f;
-            foreach (var sd in chosen)
-            {
+            foreach (var sd in chosen) {
                 string text = $"{sd.label.CapitalizeFirst()} ({sd.defName})";
                 float rowH = CalcRowHeight(text, labelW);
                 var labelRect = new Rect(0, y, labelW, rowH);
@@ -204,12 +219,11 @@ namespace RepeatableResearch
                 Widgets.Label(labelRect, text);
                 Text.Anchor = oldAnchor; Text.WordWrap = oldWrap;
 
-                if (Settings.userStatNames.Contains(sd.defName))
-                {
-                    if (Widgets.ButtonText(btnRect, "Remove"))
-                    {
+                if (Settings.userStatNames.Contains(sd.defName)) {
+                    if (Widgets.ButtonText(btnRect, "Remove")) {
                         Settings.userStatNames.Remove(sd.defName);
                         WriteSettings();
+                        RebuildAffectedSafe();         // ? added
                     }
                 }
                 TooltipHandler.TipRegion(labelRect, text);

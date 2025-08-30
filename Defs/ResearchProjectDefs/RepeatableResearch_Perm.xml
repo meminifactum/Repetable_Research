@@ -21,22 +21,3 @@
     <researchViewY>1.00</researchViewY>
   </ResearchProjectDef>
 </Defs>
-
-
-<!-- 
-<Defs>
-  <ResearchProjectDef>
-    <defName>EndlessProgress_Perm</defName>
-    <label>Endless Progress (Permanent)</label>
-    <description>Repeatable research that grants a permanent small stat bonus to a random stat.</description>
-    <baseCost>8000</baseCost>
-    <tab>Repeatables</tab>
-    <techLevel>Industrial</techLevel>
-    <prerequisites/>
-    <researchViewX>0</researchViewX>
-    <researchViewY>0</researchViewY>
-    <researchViewDrawAsPrerequisite>false</researchViewDrawAsPrerequisite>
-  </ResearchProjectDef>
-</Defs>
-
--->

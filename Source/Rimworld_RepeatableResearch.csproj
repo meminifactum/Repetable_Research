@@ -1,44 +1,45 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2B02937B-D25D-43D0-B9B4-87792EB06582}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFramework>net472</TargetFramework>
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>AnyCPU</Platforms>
+
     <RootNamespace>Rimworld_RepeatableResearch</RootNamespace>
     <AssemblyName>Rimworld_RepeatableResearch</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+
+    <!-- 기본 Compile 자동 포함 비활성화: 아래 명시 목록만 빌드 -->
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\..\Conditorium\Coding\Rimmod\Repeatable Research - Assembly\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+
   <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>..\..\..\..\..\..\User_Program\Steam\steamapps\workshop\content\294100\2009463077\Current\Assemblies\0Harmony.dll</HintPath>
-      <Private>False</Private>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <Private>false</Private>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\..\..\..\..\User_Program\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
-      <Private>False</Private>
+      <Private>false</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -50,23 +51,22 @@
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\..\..\..\User_Program\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
-      <Private>False</Private>
+      <Private>false</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\..\..\..\..\..\User_Program\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
-      <Private>False</Private>
+      <Private>false</Private>
     </Reference>
-    <Reference Include="UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="UnityEngine.IMGUIModule">
       <HintPath>..\..\..\..\..\..\User_Program\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
-      <Private>False</Private>
+      <Private>false</Private>
     </Reference>
-    <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="UnityEngine.TextRenderingModule">
       <HintPath>..\..\..\..\..\..\User_Program\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
-      <Private>False</Private>
+      <Private>false</Private>
     </Reference>
   </ItemGroup>
+
   <ItemGroup>
     <Compile Include="Patch_FinishProject.cs" />
     <Compile Include="Patch_StatWorker.cs" />
@@ -78,5 +78,4 @@
     <Compile Include="RRPool.cs" />
     <Compile Include="RRSettings.cs" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,30 +1,32 @@
-﻿using RimWorld;
-using Verse;
 using HarmonyLib;
+using RimWorld;
+using Verse;
 
-namespace RepeatableResearch
-{
+namespace RepeatableResearch {
     [HarmonyPatch(typeof(StatWorker), nameof(StatWorker.GetValueUnfinalized))]
-    public static class Patch_StatWorker
-    {
-        [HarmonyPostfix]
-        public static void Postfix(StatRequest req, ref float __result, StatDef ___stat)
-        {
+    public static class Patch_StatWorker {
+        public static void Postfix(StatRequest req, ref float __result, StatDef ___stat) {
             var comp = Current.Game?.GetComponent<RepeatableResearchComp>();
             if (comp == null) return;
 
-            // 대상이 colonist pawn이 아니면 무시
-            if (!(req.Thing is Pawn pawn)) return;
-            if (!pawn.IsColonist) return;
+            // colonist only
+            if (!(req.Thing is Pawn p) || p.Faction != Faction.OfPlayerSilentFail) return;
 
-            // 빠른 조회 (O(1))
-            int perm = comp.PermCountFast(___stat);
-            int temp = comp.TempCountFast(___stat);
-            if ((perm | temp) == 0) return;
+            // ?? ??
+            var hasAnyField = AccessTools.Field(typeof(RepeatableResearchComp), "_hasAnyBuffs");
+            if (hasAnyField != null && !(bool)hasAnyField.GetValue(comp)) return;
+
+            // ?? ??
+            var affectedField = AccessTools.Field(typeof(RepeatableResearchComp), "_affected");
+            var affected = affectedField?.GetValue(comp) as System.Collections.Generic.HashSet<StatDef>;
+            if (affected == null || ___stat == null || !affected.Contains(___stat)) return;
+
+            int perm = comp.PermStacks(___stat);
+            int temp = comp.ActiveTempStacks(___stat, Find.TickManager.TicksGame);
+            if (perm <= 0 && temp <= 0) return;
 
             float pInc = (RRMod.Settings?.incrementPercentPerm ?? 2f) / 100f;
             float tInc = (RRMod.Settings?.incrementPercentTemp ?? 3f) / 100f;
-
             __result *= (1f + pInc * perm) * (1f + tInc * temp);
         }
     }

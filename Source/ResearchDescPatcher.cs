@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using RimWorld;
@@ -48,7 +48,7 @@ namespace RepeatableResearch
                     {
                         var stat = kv.Key; if (stat == null) continue;
                         int stacks = kv.Value; float total = stacks * pInc;
-                        sb.AppendLine($" • {stat.label.CapitalizeFirst()}: +{total:0.#}%  ({stacks} perm)");
+                        sb.AppendLine($" • {stat.LabelCap}: {total/100f:0.##%}  ({stacks} perm)");
                     }
                 }
                 else sb.AppendLine(" • none");
@@ -68,9 +68,9 @@ namespace RepeatableResearch
                     {
                         int stacks = g.Count(); if (stacks <= 0) continue; any = true;
                         int soonest = g.Min(e => e.ExpiryTick);
-                        float daysLeft = (soonest - now) / 60000f;
+                        float daysLeft = (soonest - now) / (float)GenDate.TicksPerDay;
                         float total = stacks * tInc;
-                        sb.AppendLine($" • {g.Key.label.CapitalizeFirst()}: +{total:0.#}%  ({stacks} temp, {daysLeft:0.#}d left)");
+                        sb.AppendLine($" • {g.Key.LabelCap}: {total/100f:0.##%}  ({stacks} temp, {daysLeft:0.#}d left)");
                     }
                     if (!any) sb.AppendLine(" • none");
                 }

@@ -21,21 +21,3 @@
     <researchViewY>1.00</researchViewY>
   </ResearchProjectDef>
 </Defs>
-
-
-<!--
-<Defs>
-  <ResearchProjectDef>
-
-    <label>Endless Progress (Temporary)</label>
-    <description>Repeatable research that grants a temporary small stat bonus to a random stat.</description>
-    <baseCost>8000</baseCost>
-    <tab>Repeatables</tab>
-    <techLevel>Industrial</techLevel>
-    <prerequisites/>
-    <researchViewX>4</researchViewX>
-    <researchViewY>0</researchViewY>
-    <researchViewDrawAsPrerequisite>false</researchViewDrawAsPrerequisite>
-  </ResearchProjectDef>
-</Defs>
--->
